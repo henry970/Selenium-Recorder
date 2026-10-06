@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Selenium Recorder</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="dot" id="statusDot"></span>
+        <h1>Selenium Recorder</h1>
+      </div>
+      <div class="header-right">
+        <span class="status-label" id="statusLabel">Idle</span>
+        <button id="btnSettings" class="icon-btn" title="Settings">⚙</button>
+      </div>
+    </header>
+
+    <section class="controls">
+      <button id="btnRecord" class="btn btn-primary" title="Start recording">● Record</button>
+      <button id="btnPause" class="btn" title="Pause recording">❚❚ Pause</button>
+      <button id="btnResume" class="btn" title="Resume recording">▶ Resume</button>
+      <button id="btnStop" class="btn btn-danger" title="Stop recording">■ Stop</button>
+      <button id="btnReplay" class="btn" title="Replay recorded steps">↻ Replay</button>
+      <button id="btnClear" class="btn btn-ghost" title="Clear all steps">🗑 Clear</button>
+    </section>
+
+    <div id="sectionMarkerRow" class="row section-marker-row hidden">
+      <input type="text" id="sectionLabel" placeholder="Section name (e.g. ToggleToLive)" />
+      <button id="btnAddSection" class="btn btn-small" title="Mark a new logical section from here, even without a page navigation — useful for multi-step forms on one URL">✂ New Section</button>
+    </div>
+    <div class="row manual-step-row">
+      <input type="number" id="waitDuration" min="0" value="1000" aria-label="Wait duration in milliseconds" />
+      <button id="btnAddWait" class="btn btn-small">Add wait</button>
+    </div>
+    <div class="manual-assertion">
+      <select id="assertionType" aria-label="Assertion type">
+        <option value="visible">Element visible</option>
+        <option value="present">Element present</option>
+        <option value="text">Text appears</option>
+      </select>
+      <input type="text" id="assertionLocator" placeholder="CSS locator (e.g. #success)" />
+      <input type="text" id="assertionText" placeholder="Expected text (for text assertion)" />
+      <button id="btnAddAssertion" class="btn btn-small">Add check</button>
+    </div>
+    <div id="validationSummary" class="validation-summary hidden" role="status"></div>
+
+    <div id="replayProgress" class="replay-progress hidden">
+      <div class="replay-bar"><div class="replay-bar-fill" id="replayBarFill"></div></div>
+      <span id="replayProgressLabel"></span>
+    </div>
+
+    <section class="steps-section">
+      <div class="steps-header">
+        <h2>Recorded Steps <span id="stepCount" class="count-badge">0</span></h2>
+      </div>
+      <ul id="stepsList" class="steps-list"></ul>
+      <p id="emptyState" class="empty-state">No steps recorded yet. Hit Record and interact with the page.</p>
+    </section>
+
+    <section class="save-load">
+      <div class="row">
+        <input type="text" id="recordingName" placeholder="Recording name" />
+        <button id="btnSave" class="btn btn-small">Save</button>
+      </div>
+      <div class="row">
+        <select id="savedRecordings"></select>
+        <button id="btnLoad" class="btn btn-small">Load</button>
+        <button id="btnDeleteSaved" class="btn btn-small btn-ghost">Delete</button>
+      </div>
+    </section>
+
+    <section class="export-section">
+      <h2>Export Automation</h2>
+      <div class="row">
+        <label>Project name</label>
+        <input type="text" id="projectName" value="recorded_automation" />
+      </div>
+      <div class="row">
+        <label>Framework</label>
+        <select id="framework">
+          <option value="pom" selected>Page Object Model</option>
+          <option value="linear">Linear (single file)</option>
+        </select>
+      </div>
+      <div class="row">
+        <label>Test runner</label>
+        <select id="testRunner">
+          <option value="pytest" selected>Pytest</option>
+          <option value="unittest">unittest</option>
+        </select>
+      </div>
+      <button id="btnExport" class="btn btn-primary btn-full">Preview generated files</button>
+    </section>
+  </div>
+
+  <dialog id="previewDialog">
+    <header class="preview-header">
+      <strong>Generated project preview</strong>
+      <button id="btnClosePreview" class="icon-btn" aria-label="Close preview">✕</button>
+    </header>
+    <div class="preview-content">
+      <select id="previewFiles" aria-label="Generated file"></select>
+      <pre id="previewCode"></pre>
+      <div id="previewWarnings" class="validation-summary"></div>
+    </div>
+    <button id="btnDownloadZip" class="btn btn-primary btn-full">Download ZIP</button>
+  </dialog>
+
+  <template id="stepTemplate">
+    <li class="step-item" draggable="true">
+      <span class="drag-handle">⠿</span>
+      <span class="step-index"></span>
+      <span class="step-icon"></span>
+      <div class="step-body">
+        <div class="step-title"></div>
+        <div class="step-meta"></div>
+        <input class="step-value-input hidden" type="text" />
+        <label class="step-secret-toggle hidden">
+          <input class="step-secret-input" type="checkbox" />
+          Secret (mask and use environment variable on export)
+        </label>
+        <input class="step-locator-input hidden" type="text" aria-label="Locator value" />
+      </div>
+      <button class="step-edit" title="Edit value or locator">✎</button>
+      <button class="step-delete" title="Delete step">✕</button>
+    </li>
+  </template>
+
+  <script src="../lib/constants.js"></script>
+  <script src="../lib/validation.js"></script>
+  <script src="../lib/zip.js"></script>
+  <script src="../lib/logo.js"></script>
+  <script src="../lib/codegen.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

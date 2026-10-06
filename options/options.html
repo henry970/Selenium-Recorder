@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Selenium Recorder — Settings</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Selenium Recorder Settings</h1>
+    </header>
+
+    <section class="card">
+      <h2>Target browsers</h2>
+      <p class="hint">
+        Chosen browsers are used to build the multi-browser
+        <code>driver_setup</code> pytest fixture in every Page Object
+        Model export. unittest uses only the first selected browser.
+        Uncheck any browser you don't have installed or
+        don't want to test against.
+      </p>
+
+      <label class="browser-row">
+        <input type="checkbox" id="browser-chrome" value="chrome" />
+        <span>Chrome</span>
+      </label>
+      <label class="browser-row">
+        <input type="checkbox" id="browser-edge" value="edge" />
+        <span>Edge</span>
+      </label>
+      <label class="browser-row">
+        <input type="checkbox" id="browser-firefox" value="firefox" />
+        <span>Firefox</span>
+      </label>
+
+      <p class="hint">
+        This also decides which single browser the <strong>Linear</strong>
+        export uses — the first checked browser above, top to bottom.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Generated project options</h2>
+      <label class="browser-row">
+        <input type="checkbox" id="include-screenshots" />
+        <span>Capture screenshots when generated page actions fail</span>
+      </label>
+      <label class="browser-row">
+        <input type="checkbox" id="include-logging" />
+        <span>Include action logging in generated page objects</span>
+      </label>
+      <p class="hint">These settings apply to future exports. The test runner and output style are chosen in the popup.</p>
+    </section>
+
+    <div class="actions">
+      <button id="btnSave" class="btn btn-primary">Save</button>
+      <span id="savedNotice" class="saved-notice hidden">Saved ✓</span>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
